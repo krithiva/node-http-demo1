@@ -67,7 +67,8 @@ pipeline {
 
             sh "jx step git credentials"
             // so we can retrieve the version in later steps
-            sh "echo \$(jx-release-version) > VERSION"
+           // sh "echo \$(jx-release-version) > VERSION"
+           sh "echo 0.0.80 > VERSION"
           }
           dir ('./charts/node-test-jx') {
             container('nodejs') {
@@ -77,7 +78,6 @@ pipeline {
           container('nodejs') {
             sh "npm install"
             sh "CI=true DISPLAY=:99 npm test"
-
             sh 'export VERSION=`cat VERSION` && skaffold build -f skaffold.yaml'
 
             sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:\$(cat VERSION)"
